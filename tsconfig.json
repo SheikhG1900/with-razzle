@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
+    "target": "esnext",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports":true,
+    "sourceMap": true,
+  },
+  "exclude": [
+    "build"
+  ]
+}
