@@ -1,4 +1,5 @@
 import './App.css'
+import './tailwind.css'
 import React from 'react'
 import Route from 'react-router-dom/Route'
 import Switch from 'react-router-dom/Switch'
@@ -11,3 +12,4 @@ const App = () => (
 )
 
 export default App
+

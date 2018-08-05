@@ -6,11 +6,12 @@
     "start": "razzle start --inspect --inspect-port 9230",
     "build": "razzle build",
     "test": "razzle test --env=jsdom",
-    "start:prod": "NODE_ENV=production node build/server.js"
+    "start:prod": "cross-env NODE_ENV=production node build/server.js"
   },
   "dependencies": {
+    "cls-hooked": "^4.2.2",
     "express": "4.16.3",
-    "razzle": "2.2.0",
+    "razzle": "^2.4.0",
     "react": "16.4.1",
     "react-dom": "16.4.1",
     "react-router-dom": "4.3.1"
@@ -22,8 +23,13 @@
     "@types/react-dom": "^16.0.6",
     "@types/react-router-dom": "^4.2.7",
     "@types/webpack-env": "^1.13.6",
+    "cross-env": "^5.2.0",
     "eslint-plugin-compat": "^2.4.0",
+    "glob-all": "^3.1.0",
+    "purify-css": "^1.2.5",
+    "purifycss-webpack": "^0.7.0",
     "razzle-plugin-typescript": "^2.2.0",
+    "tailwindcss": "^0.6.4",
     "tslint": "^5.10.0",
     "tslint-react": "^3.6.0",
     "typescript": "^2.9.2"
