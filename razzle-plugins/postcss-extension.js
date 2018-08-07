@@ -28,7 +28,6 @@ const addplugins = (opts, userOptions) => {
   } else if (Array.isArray(options.plugins)) {
     options.plugins = () => [...userOptions.plugins, ...options.plugins]
   }
-  console.log(options.plugins())
   return options
 }
 
