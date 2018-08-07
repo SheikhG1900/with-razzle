@@ -14,7 +14,8 @@
     "razzle": "^2.4.0",
     "react": "16.4.1",
     "react-dom": "16.4.1",
-    "react-router-dom": "4.3.1"
+    "react-loadable": "^5.4.0",
+    "react-router-dom": "^4.3.1"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",

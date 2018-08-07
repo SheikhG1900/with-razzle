@@ -1,6 +1,8 @@
 const sourceMap = require('./razzle-plugins/source-map')
 const postcssExtension = require('./razzle-plugins/postcss-extension')
 const purifycss = require('./razzle-plugins/purify-css')
+const reactLoadable = require('./razzle-plugins/react-loadable')
+
 const path = require('path')
 const glob = require('glob-all')
 module.exports = {
@@ -30,6 +32,12 @@ module.exports = {
         options: {
           paths: glob.sync([path.join(__dirname, "src/**/*.[tj]s?(x)")]),
           minimize: true
+        },
+      },
+      {
+        func: reactLoadable,
+        options: {
+          filename: path.join(__dirname, "build/react-loadable.json"),
         },
       },
     ],

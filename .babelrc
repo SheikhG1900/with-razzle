@@ -1,5 +1,4 @@
 {
-    "presets": [
-      "razzle/babel"
-    ]
+    "presets": [ "razzle/babel" ],
+    "plugins": [ "react-loadable/babel" ]
 }
