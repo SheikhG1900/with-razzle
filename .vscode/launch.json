@@ -12,7 +12,7 @@
             "runtimeExecutable": "npm",
             "protocol": "inspector",
             "console": "integratedTerminal",
-            "timeout": 20000,
+            "timeout": 40000,
             "runtimeArgs": [
                 "run-script",
                 "start"

@@ -7,7 +7,7 @@ const server = http.createServer(app)
 let currentApp = app
 
 Loadable.preloadAll().then(() => {
-  server.listen(process.env.PORT || 3000, (error) => {
+  server.listen(process.env.PORT || 3000, (error?) => {
     if (error) {
       console.log(error)
     }
