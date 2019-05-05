@@ -2,8 +2,7 @@ import React from 'react'
 import logo from './react.svg'
 import './Home.css'
 //import 'antd/dist/antd.css'
-class Home extends React.Component {
-  render() {
+const Home = () => {
     return (
       <div className="Home">
         <div className="Home-header">
@@ -28,6 +27,5 @@ class Home extends React.Component {
       </div>
     )
   }
-}
 
 export default Home

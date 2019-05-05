@@ -1,51 +1,58 @@
-const sourceMap = require('./razzle-plugins/source-map')
-const postcssExtension = require('./razzle-plugins/postcss-extension')
-const purifycss = require('./razzle-plugins/purify-css')
-const reactLoadable = require('./razzle-plugins/react-loadable')
-
 const path = require('path')
 const glob = require('glob-all')
-module.exports = {
+
+const typescript = {
+  name: 'typescript',
+  options: {
+    useBabel: true,
+    useEslint: true,
+  },
+}
+
+const sourceMap = {
+  func: require('./razzle-plugins/source-map'),
+  options: {
+  },
+}
+
+const postcssExtension = {
+  func: require('./razzle-plugins/postcss-extension'),
+  options: {
     plugins: [
-      {
-        name: 'typescript',
-        options: {
-          useBabel: true,
-          useEslint: true,
-        },
-      },
-      {
-        func: sourceMap,
-        options: {
-        },
-      },
-      {
-        func: postcssExtension,
-        options: {
-          plugins:[
-            require('tailwindcss')(path.join(__dirname, 'tailwind.js'))
-          ]
-        },
-      },
-      {
-        func: purifycss,
-        options: {
-          paths: glob.sync([path.join(__dirname, "src/**/*.[tj]s?(x)")]),
-          minimize: true
-        },
-      },
-      {
-        func: reactLoadable,
-        options: {
-          filename: path.join(__dirname, "build/react-loadable.json"),
-        },
-      },
-    ],
-    modify: (config, { target, dev }, webpack) => {
-      if(target === 'web') {
-        //console.dir(config ,{depth:10})
-        //console.dir(ExtractTextPlugin.extract({use}), {depth:10})
-      }
-      return config
+      require('tailwindcss')(path.join(__dirname, 'tailwind.js'))
+    ]
+  },
+}
+
+const purifycss = {
+  func: require('./razzle-plugins/purify-css'),
+  options: {
+    paths: glob.sync([path.join(__dirname, "src/**/*.[tj]s?(x)")]),
+    minimize: true
+  },
+}
+
+const di = {
+  func: require('./razzle-plugins/di'),
+}
+
+const reactLoadable = {
+  func: require('./razzle-plugins/react-loadable'),
+  options: {
+    filename: path.join(__dirname, "build/react-loadable.json"),
+  },
+}
+
+
+module.exports = {
+  plugins: [typescript, sourceMap, postcssExtension, purifycss, di, reactLoadable],
+  modify: (config, { target, dev }, webpack) => {
+    config.resolve.alias['@'] = path.resolve(__dirname, 'src/main/')
+    config.resolve.alias['@aw'] = path.resolve(__dirname, 'src/aw/')
+    if (target === 'web') {
+      //console.dir(config ,{depth:10})
+      //console.dir(ExtractTextPlugin.extract({use}), {depth:10})
     }
+    return config
   }
+}

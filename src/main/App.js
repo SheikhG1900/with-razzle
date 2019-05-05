@@ -1,12 +1,11 @@
-import './App.css'
-import './tailwind.css'
+import '@/App.css'
+import '@/tailwind.css'
 import React from 'react'
-import Route from 'react-router-dom/Route'
-import Switch from 'react-router-dom/Switch'
+import {Route, Switch} from 'react-router-dom'
 import Loadable from 'react-loadable'
 
 const Home = Loadable({
-  loader: () => import('./Home'),
+  loader: () => import('@/Home'),
   loading: () => null,
 })
 

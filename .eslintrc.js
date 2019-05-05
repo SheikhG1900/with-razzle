@@ -1,3 +1,4 @@
+const path = require('path')
 
 // react
 var react = {
@@ -24,8 +25,14 @@ var resolver = {
       "node": {
         "extensions": [
           ".js",
-          ".jsx"
+          ".jsx",
+          ".css"
         ]
+      },
+      "babel-module": {
+        "alias": {
+          "@": path.resolve(__dirname, 'src/main')
+        }
       }
     }
   },

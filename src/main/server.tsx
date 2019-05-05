@@ -4,7 +4,7 @@ import { renderToString } from 'react-dom/server'
 import { Capture } from 'react-loadable'
 import { getBundles } from 'react-loadable/webpack'
 import { StaticRouter } from 'react-router-dom'
-import stats from '../build/react-loadable.json'
+import stats from '../../build/react-loadable.json'
 
 import App from './App'
 
@@ -19,7 +19,7 @@ server
   .get('/*', (req, res) => {
     const context: {url?: any} = {}
     const modules = []
-    const modulePusher = (moduleName) => modules.push(moduleName)
+    const modulePusher = (moduleName)  => modules.push(moduleName)
     const markup = renderToString(
       <Capture report={modulePusher}>
         <StaticRouter context={context} location={req.url}>
@@ -31,10 +31,13 @@ server
     if (context.url) {
       res.redirect(context.url)
     } else {
+      modules.push('@aw/Home')
       const bundles = getBundles(stats, modules)
-      const jsChunks = bundles.filter((bundle) => bundle.file.endsWith('.js'))
-      const cssChunks = bundles.filter((bundle) => bundle.file.endsWith('.css'))
-      console.log({ url: req.url, cssChunks, jsChunks, modules, bundles })
+      const jsChunks = bundles.filter((bundle) => bundle && bundle.file.endsWith('.js'))
+      const cssChunks = bundles.filter((bundle) => bundle && bundle.file.endsWith('.css'))
+      // tslint:disable-next-line:object-literal-sort-keys
+      console.log({ url: req.url, cssChunks, jsChunks, modules, bundles
+        ,           len: bundles.length, env: process.env.RAZZLE_ASSETS_MANIFEST })
       res.status(200).send(
         `<!doctype html>
     <html lang="">
