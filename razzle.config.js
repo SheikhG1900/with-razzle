@@ -39,13 +39,14 @@ const di = {
 const reactLoadable = {
   func: require('./razzle-plugins/react-loadable'),
   options: {
-    filename: path.join(__dirname, "build/react-loadable.json"),
+    filename: "../react-loadable.json",
+    writeToDisk: true
   },
 }
 
 
 module.exports = {
-  plugins: [typescript, sourceMap, postcssExtension, purifycss, di, reactLoadable],
+  plugins: [typescript, sourceMap, postcssExtension, purifycss, reactLoadable, di],
   modify: (config, { target, dev }, webpack) => {
     config.resolve.alias['@'] = path.resolve(__dirname, 'src/main/')
     config.resolve.alias['@aw'] = path.resolve(__dirname, 'src/aw/')

@@ -2,9 +2,9 @@ import App from './App'
 import BrowserRouter from 'react-router-dom/BrowserRouter'
 import React from 'react'
 import { hydrate } from 'react-dom'
-import Loadable from 'react-loadable'
+import { loadableReady } from '@loadable/component'
 
-Loadable.preloadReady().then(() => {
+loadableReady(() => {
   hydrate(
     <BrowserRouter>
       <App />

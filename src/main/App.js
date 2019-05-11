@@ -2,12 +2,9 @@ import '@/App.css'
 import '@/tailwind.css'
 import React from 'react'
 import {Route, Switch} from 'react-router-dom'
-import Loadable from 'react-loadable'
+import loadable  from '@loadable/component'
 
-const Home = Loadable({
-  loader: () => import('@/Home'),
-  loading: () => null,
-})
+const Home = loadable(() => import('@/Home'))
 
 const App = () => (
   <Switch>
