@@ -6,7 +6,8 @@
     "start": "razzle start --inspect --inspect-port 9230",
     "build": "razzle build",
     "test": "razzle test --env=jsdom",
-    "start:prod": "cross-env NODE_ENV=production node build/server.js"
+    "start:prod": "cross-env NODE_ENV=production node build/server.js",
+    "lint": "cross-env NODE_ENV=development eslint --debug ./src/main/App.js"
   },
   "dependencies": {
     "@loadable/component": "^5.9.0",
@@ -31,11 +32,18 @@
     "@types/react-dom": "^16.8.4",
     "@types/react-router-dom": "^4.3.2",
     "@types/webpack-env": "^1.13.9",
+    "babel-eslint": "^10.0.1",
     "babel-plugin-module-resolver": "^3.2.0",
     "cross-env": "^5.2.0",
+    "eslint": "^5.16.0",
+    "eslint-config-react-app": "^4.0.1",
     "eslint-import-resolver-babel-module": "^5.1.0",
     "eslint-plugin-compat": "^3.1.1",
+    "eslint-plugin-flowtype": "^3.8.2",
     "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.13.0",
+    "eslint-plugin-react-hooks": "^1.6.0",
     "glob-all": "^3.1.0",
     "purify-css": "^1.2.5",
     "purifycss-webpack": "^0.7.0",

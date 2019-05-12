@@ -1,4 +1,5 @@
 const path = require('path')
+const { alias } = require("./razzle-plugins/di")
 
 // react
 var react = {
@@ -30,9 +31,7 @@ var resolver = {
         ]
       },
       "babel-module": {
-        "alias": {
-          "@": path.resolve(__dirname, 'src/main')
-        }
+        "alias": alias
       }
     }
   },
