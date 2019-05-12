@@ -33,7 +33,7 @@ const purifycss = {
 }
 
 const di = {
-  func: require('./razzle-plugins/di'),
+  func: require('./razzle-plugins/di').func,
 }
 
 const reactLoadable = {
@@ -48,8 +48,6 @@ const reactLoadable = {
 module.exports = {
   plugins: [typescript, sourceMap, postcssExtension, purifycss, reactLoadable, di],
   modify: (config, { target, dev }, webpack) => {
-    config.resolve.alias['@'] = path.resolve(__dirname, 'src/main/')
-    config.resolve.alias['@aw'] = path.resolve(__dirname, 'src/aw/')
     if (target === 'web') {
       //console.dir(config ,{depth:10})
       //console.dir(ExtractTextPlugin.extract({use}), {depth:10})
