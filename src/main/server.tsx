@@ -7,10 +7,7 @@ import stats from '../../build/react-loadable.json'
 
 import App from './App'
 
-// tslint:disable-next-line:no-var-requires
-const assets = require(process.env.RAZZLE_ASSETS_MANIFEST)
 const server = express()
-
 const extractor = new ChunkExtractor({ stats, entrypoints: ['client'] })
 
 server
