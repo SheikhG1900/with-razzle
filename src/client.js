@@ -1,2 +1,2 @@
-import client from './main/client'
+import client from './@main/client'
 client()
