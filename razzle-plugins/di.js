@@ -1,4 +1,4 @@
-const path = require('path')
+const {resolve, relative, join, sep} = require('path')
 const { lstatSync, readdirSync, statSync } = require('fs')
 const { NormalModuleReplacementPlugin } = require('webpack')
 
@@ -9,18 +9,18 @@ const throwif = (condition, error = new Error('unknown error')) => {
     return false
 }
 const MAIN_APP = '@main'
-const BASE_PATH = path.resolve(__dirname, '../')
+const BASE_PATH = resolve(__dirname, '../')
 const DI_CONFIG = require('../src/@di-config')
 
-const getAppPath = (appName) => path.resolve(BASE_PATH, `src/${appName}`)
+const getAppPath = (appName) => resolve(BASE_PATH, `src/${appName}`)
 const MAIN_APP_PATH = getAppPath(MAIN_APP)
 
-const getAppManifest = (appPath) => require(path.resolve(appPath, '@manifest'))
+const getAppManifest = (appPath) => require(resolve(appPath, '@manifest'))
 const RUN_APP_MANIFEST = getAppManifest(getAppPath(DI_CONFIG.runApp))
 
 const getFiles = (dir, base = '') => readdirSync(dir, { withFileTypes: true }).reduce((files, file) => {
-    const filePath = path.join(dir, file.name)
-    const relativePath = path.join(base, file.name)
+    const filePath = join(dir, file.name)
+    const relativePath = join(base, file.name)
     if (file.isDirectory()) {
         return files.concat(getFiles(filePath, relativePath))
     } else if (file.isFile()) {
@@ -43,12 +43,12 @@ const getDependencies = (manifest = RUN_APP_MANIFEST, dependencies = [DI_CONFIG.
     return getDependencies(getAppManifest(getAppPath(dependency)), dependencies)
 
 }
-const dependencies = getDependencies()
+const dependencies = getDependencies().reverse()  //top to bottom
 
 const getApps = () => dependencies.reduce((apps, dependency, index, source) => {
     const path = getAppPath(dependency)
     apps[dependency] = {
-        level: dependencies.length - index - 1,
+        level: index,
         path,
         alias: dependency,
         app: dependency,
@@ -76,23 +76,17 @@ const getAliasConfig = () => {
 }
 const alias = getAliasConfig()
 
-const getPathApp = (path) => {
-    const appName = Object.keys(apps).find((key) => path.startsWith(apps[key].path))
-    if (appName) {
-        return apps[appName]
-    }
-    return;
-}
+const getPathApp = (path) => Object.values(apps).find((app) => path === app.path || path.startsWith(app.path + sep))
 
 const resolveModule = (moduleId, basePath = BASE_PATH) => {
     const module = {}
     if (moduleId.startsWith('.')) {
         // relative module path.
-        module.fullPath = path.resolve(basePath, moduleId)
+        module.fullPath = resolve(basePath, moduleId)
         module.app = getPathApp(module.fullPath)
         if (!module.app) return null
 
-        module.appRelativePath = path.relative(module.app.path, module.fullPath)
+        module.appRelativePath = relative(module.app.path, module.fullPath)
     } else {
         const [appName, otherPart] = moduleId.split('/', 2)
         if (apps[appName]) {
@@ -103,7 +97,7 @@ const resolveModule = (moduleId, basePath = BASE_PATH) => {
             }
 
             const app = apps[appName]
-            module.fullPath = path.resolve(app.path, relativePath)
+            module.fullPath = resolve(app.path, relativePath)
             module.app = app
             module.appRelativePath = relativePath
         } else {
@@ -113,10 +107,17 @@ const resolveModule = (moduleId, basePath = BASE_PATH) => {
     return module
 }
 
+const m = resolveModule('@/Home','E:\\work\\github\\with-razzle\\src\\@main')
+console.log({m, sep:sep, apps, app: getPathApp('E:\\work\\github\\with-razzle\\src\\@main')})
+
 const dependencyInjector = (resource) => {
     if (resource.request === '@/Home') {
         const module = resolveModule(resource.request, resource.context)
-        console.log({module, MAIN_APP, BASE_PATH, DI_CONFIG, MAIN_APP_PATH, RUN_APP_MANIFEST, dependencies, apps, alias, resource, context: resource.context, request: resource.request })
+        if(module) {
+            const contextApp = getPathApp(resource.context)
+            console.log({contextApp, module, MAIN_APP, BASE_PATH, DI_CONFIG, MAIN_APP_PATH, RUN_APP_MANIFEST, dependencies, apps, alias, resource, context: resource.context, request: resource.request })
+        }
+        
         // resource.request = '@aw/Home'
     }
 }
