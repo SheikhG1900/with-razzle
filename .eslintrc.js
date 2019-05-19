@@ -1,4 +1,3 @@
-const path = require('path')
 const { alias } = require("./razzle-plugins/di")
 
 // react

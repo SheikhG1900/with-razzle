@@ -9,10 +9,11 @@
     "jsx": "preserve",
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["./main/*"]
+      "@/*": ["./@main/*"]
     }
   },
   "exclude": [
-    "build"
+    "build",
+    "razzle-plugins"
   ]
 }
