@@ -1,19 +1,21 @@
 {
   "compilerOptions": {
+    "outDir": "./built",
     "allowJs": true,
     "checkJs": false,
     "target": "esnext",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports":true,
+    "strictNullChecks": true,
     "sourceMap": true,
     "jsx": "preserve",
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["./@main/*"]
+      "@/*": ["./apps/@main/*"]
     }
   },
   "exclude": [
-    "build",
-    "razzle-plugins"
+    "build"
   ]
 }
+

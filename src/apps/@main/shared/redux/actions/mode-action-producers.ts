@@ -3,7 +3,7 @@ import { actionModes } from '@/shared/redux/redux-const'
 import { IAction, IActionError } from '@/shared/redux/redux-types'
 import { makeActionTypeByAction } from './action-helper'
 
-export const makeErrorAction = (action: IAction, error: any): IActionError => ({
+export const produceErrorAction = (action: IAction, error: any): IActionError => ({
   ...action,
   error,
   mode: actionModes.ERROR,
@@ -11,7 +11,7 @@ export const makeErrorAction = (action: IAction, error: any): IActionError => ({
   type: makeActionTypeByAction(action, actionModes.ERROR),
 })
 
-export const makeSuccessAction = (action: IAction, result: any): IAction => ({
+export const produceSuccessAction = (action: IAction, result: any): IAction => ({
   ...action,
   data: result,
   mode: actionModes.SUCCESS,
@@ -19,7 +19,7 @@ export const makeSuccessAction = (action: IAction, result: any): IAction => ({
   type: makeActionTypeByAction(action, actionModes.SUCCESS),
 })
 
-export const makeIgnoredAction = (action: IAction): IAction => ({
+export const produceIgnoredAction = (action: IAction): IAction => ({
   ...action,
   mode: actionModes.IGNORED,
   request: action,

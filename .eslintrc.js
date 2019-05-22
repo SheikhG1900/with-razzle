@@ -1,4 +1,10 @@
-const { alias } = require("./razzle-plugins/di")
+// const { alias } = require("./razzle-plugins/di")
+const alias = {
+  '@main': 'E:\\work\\github\\with-razzle\\src\\apps\\@main',
+  'aw-am': 'E:\\work\\github\\with-razzle\\src\\apps\\aw-am',
+  'aw': 'E:\\work\\github\\with-razzle\\src\\apps\\aw',
+  '@': 'E:\\work\\github\\with-razzle\\src\\apps\\@main'
+}
 
 // react
 var react = {

@@ -5,8 +5,8 @@ export interface IAction {
     command: string,
     done: Promise<any>,
     callback: {
-        resolve?(result?: any): void,
-        reject?(error: any, result?: any): void
+        resolve?(result: any, action: IAction): void,
+        reject?(error: any, action: IAction, result?: any): void
     },
     onMount: boolean
     meta: {
