@@ -1,16 +1,18 @@
 import { call, put, select } from 'redux-saga/effects'
 import { produceErrorAction, produceIgnoredAction, produceSuccessAction } from '../actions/mode-action-producers'
+import { actionCommands } from '../redux-const'
 import { IAction } from '../redux-types'
 import { crudIsLoaded } from '../selectors/entity-crud-selectors'
 import { getEntitySelector } from '../selectors/root-selectors'
 
 export function* $execute(action: IAction, job) {
-  const { onMount, meta: { module, entity }, callback = {} } = action
+  const { command, onMount, callback = {} } = action
   const { resolve, reject } = callback
 
   // specific case for avoiding extra loading of data.
   // when data were already fetched during server side rendering.
-  if (onMount) {
+  if (onMount && command === actionCommands.LOAD) {
+    const { meta: { module, entity } } = action
     const entityState = yield select(getEntitySelector(module, entity))
     const alreadyLoaded = crudIsLoaded(entityState)
     if (alreadyLoaded) {

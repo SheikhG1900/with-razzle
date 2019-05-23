@@ -1,9 +1,14 @@
+export interface IDictionary<T> {
+    [key: string]: T
+}
+
 export type RecursivePartial<T> = {
     [P in keyof T]?: RecursivePartial<T[P]>;
 }
 
 export interface IAppContext {
     redux: {
-        reducers: any
+        reducers: any,
+        sagaMatchers: IDictionary<(actoin: any) => any>
     }
 }
