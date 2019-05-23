@@ -1,11 +1,15 @@
 const { resolve, relative, join, sep } = require('path')
-const { lstatSync, readdirSync, statSync } = require('fs')
+const { readdirSync } = require('fs')
 const { NormalModuleReplacementPlugin } = require('webpack')
 const debug = require('debug')
 
 
 debug.enable('di:info')
 const info = debug('di:info')
+
+debug.enable('di:instruction')
+const instruction = debug('di:instruction')
+
 
 const throwif = (condition, error = new Error('unknown error')) => {
     if (condition) {
@@ -144,4 +148,9 @@ const func = (config, { target, dev }, webpack, userOptions = {}) => {
     config.resolve.alias = { ...config.resolve.alias, ...getAliasConfig() }
     return config
 }
+
+
+instruction('update your .eslintrc.js with following configuration')
+console.log({alias})
+
 module.exports = { alias, apps, func }
