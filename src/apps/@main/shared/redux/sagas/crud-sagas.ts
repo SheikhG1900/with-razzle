@@ -1,7 +1,9 @@
-import callApi from '../../api/api-caller'
+import ajax from '@/shared/ajax'
 import { actionCommands, actionModes } from '../redux-const'
 import { IAction } from '../redux-types'
 import { $execute } from './action-executioner'
+
+const callApi = ajax('/api')
 
 export const $load = (action: IAction) => {
   const { meta: { module, entity }, data } = action

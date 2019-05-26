@@ -1,11 +1,11 @@
 import { actionModes } from '../redux-const'
-import { IAction, IStoreActionsSummary } from '../redux-types'
+import { IAction, IStateActionsSummary } from '../redux-types'
 
 const {
   SUCCESS, ERROR, REQUEST, IGNORED,
 } = actionModes
 
-const defaultState: IStoreActionsSummary = {
+const defaultState: IStateActionsSummary = {
   done: 0,
   error: 0,
   errors: [],
@@ -16,7 +16,7 @@ const defaultState: IStoreActionsSummary = {
   total: 0,
 }
 
-export default (state: IStoreActionsSummary = defaultState, action: IAction): IStoreActionsSummary => {
+export default (state: IStateActionsSummary = defaultState, action: IAction): IStateActionsSummary => {
   const { mode: currentMode, request } = action
   const { total, pending, done, success, ignored, error, pendings, errors } = state
   switch (currentMode) {

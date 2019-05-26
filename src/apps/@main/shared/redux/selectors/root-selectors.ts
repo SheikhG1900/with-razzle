@@ -1,6 +1,6 @@
-import { IStore } from '../redux-types'
+import { IState } from '../redux-types'
 
-export const getActionsSummary = ({ actionsSummary }: IStore) => actionsSummary
+export const getActionsSummary = ({ actionsSummary }: IState) => actionsSummary
 export const getRoot = (state) => state
 export const getEntitySelector = (moduleName: string, entityName: string) => (state) => {
   const module = state[moduleName]

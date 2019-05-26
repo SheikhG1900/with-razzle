@@ -6,7 +6,7 @@ const { SUCCESS } = actionModes
 const initialState: IStoreCrud = { crud: { rows: [] } }
 export default (entity) => (state: IStoreCrud = initialState, action: IAction): IStoreCrud => {
   const { crud } = state
-  let newCrud = null
+  let newCrud: IStoreCrud['crud'] | null = null
 
   const { data, command, mode: currentMode, meta } = action
 

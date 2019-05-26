@@ -1,33 +1,41 @@
 import { ChunkExtractor, ChunkExtractorManager } from '@loadable/server'
+import bodyParser from 'body-parser'
+import compression from 'compression'
+import cors from 'cors'
 import express from 'express'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom'
 import stats from '../../../build/react-loadable.json'
 
+import { PUBLIC_DIR } from '_/env'
 import App from './App'
 
 const server = express()
 const extractor = new ChunkExtractor({ stats, entrypoints: ['client'] })
-
+const configuredCors = cors()
 server
-  .disable('x-powered-by')
-  .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
-  .get('/*', (req, res) => {
-    const context: {url?: any} = {}
-    const markup = renderToString(
-      <ChunkExtractorManager extractor={extractor}>
-        <StaticRouter context={context} location={req.url}>
-          <App />
-        </StaticRouter>
-      </ChunkExtractorManager>
-    )
+    .disable('x-powered-by')
+    .use(bodyParser.json({ limit: '20mb' }))
+    .use(bodyParser.urlencoded({ limit: '20mb', extended: false }))
+    .use(compression())
+    .use(express.static(PUBLIC_DIR))
+    .use('/api', configuredCors, (req, res) => res.json({ status: 'done' }))
+    .get('/*', (req, res) => {
+        const context: { url?: any } = {}
+        const markup = renderToString(
+            <ChunkExtractorManager extractor={extractor}>
+                <StaticRouter context={context} location={req.url}>
+                    <App />
+                </StaticRouter>
+            </ChunkExtractorManager>
+        )
 
-    if (context.url) {
-      res.redirect(context.url)
-    } else {
-      res.status(200).send(
-        `<!doctype html>
+        if (context.url) {
+            res.redirect(context.url)
+        } else {
+            res.status(200).send(
+                `<!doctype html>
     <html lang="">
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -41,8 +49,8 @@ server
         <div id="root">${markup}</div>
     </body>
 </html>`
-      )
-    }
-  })
+            )
+        }
+    })
 
 export default server

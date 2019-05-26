@@ -9,6 +9,10 @@ export type RecursivePartial<T> = {
 export interface IAppContext {
     redux: {
         reducers: any,
-        sagaMatchers: IDictionary<(actoin: any) => any>
+        sagaMatchers: IDictionary<(actoin: any) => any>,
+        initialState: object,
+    },
+    app: {
+        browserHistory: any
     }
 }

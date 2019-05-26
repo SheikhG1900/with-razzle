@@ -81,6 +81,7 @@ const getAliasConfig = () => {
         return config
     }, {})
     aliasConfig['@'] = MAIN_APP_PATH
+    aliasConfig['_'] = resolve(BASE_PATH, 'src')
     return aliasConfig
 }
 const alias = getAliasConfig()

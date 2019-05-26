@@ -1,9 +1,9 @@
 import { all, fork, join, select } from 'redux-saga/effects'
-import { IAction, IStoreActionsSummary } from '../redux-types'
+import { IAction, IStateActionsSummary } from '../redux-types'
 import { getActionsSummary } from '../selectors/root-selectors'
 
 export const $processPendingRequests = ($matchSaga) => function* $saga() {
-    const summary: IStoreActionsSummary = yield select(getActionsSummary)
+    const summary: IStateActionsSummary = yield select(getActionsSummary)
 
     const tasks = yield all(summary.pendings.map((action: IAction) => {
         const $matchedSaga = $matchSaga(action)

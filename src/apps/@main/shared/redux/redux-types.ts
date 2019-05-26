@@ -1,3 +1,6 @@
+import { Store } from 'redux'
+import { Task } from 'redux-saga'
+
 export interface IAction {
     type: string,
     data?: any,
@@ -26,7 +29,7 @@ export interface IStoreCrud {
     }
 }
 
-export interface IStoreActionsSummary {
+export interface IStateActionsSummary {
     total: number,
     pending: number,
     done: number,
@@ -36,7 +39,12 @@ export interface IStoreActionsSummary {
     pendings: IAction[],
     errors: IAction[],
 }
-export interface IStore {
+export interface IState {
     routing: any,
-    actionsSummary: IStoreActionsSummary
+    actionsSummary: IStateActionsSummary
+}
+
+export interface IStore extends Store<IState, any> {
+    runSaga: (saga: any) => Task,
+    close: () => any,
 }
