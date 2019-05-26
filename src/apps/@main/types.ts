@@ -13,6 +13,6 @@ export interface IAppContext {
         initialState: object,
     },
     app: {
-        browserHistory: any
+        routerContext: object
     }
 }

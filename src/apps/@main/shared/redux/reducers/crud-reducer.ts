@@ -4,13 +4,13 @@ import { IAction, IStoreCrud } from '../redux-types'
 const { LOAD, ADD } = actionCommands
 const { SUCCESS } = actionModes
 const initialState: IStoreCrud = { crud: { rows: [] } }
-export default (entity) => (state: IStoreCrud = initialState, action: IAction): IStoreCrud => {
+export default (module: string, entity: string) => (state: IStoreCrud = initialState, action: IAction): IStoreCrud => {
   const { crud } = state
   let newCrud: IStoreCrud['crud'] | null = null
 
   const { data, command, mode: currentMode, meta } = action
 
-  if (meta && meta.entity === entity) {
+  if (meta && meta.module === module && meta.entity === entity) {
     if (currentMode === SUCCESS) {
       switch (command) {
         case LOAD:

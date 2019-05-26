@@ -1,5 +1,5 @@
 import sagaMatcher from '@/shared/redux/sagas/saga-matcher'
-import { IAppContext } from '@/shared/types'
+import { IAppContext } from '_/apps/@main/types'
 import { fork, take } from 'redux-saga/effects'
 
 const $executeMatchedSaga = (appContext: IAppContext) => function* $saga() {

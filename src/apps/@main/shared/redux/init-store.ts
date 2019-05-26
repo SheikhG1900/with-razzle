@@ -1,14 +1,12 @@
 import { ENV_PRODUCTION } from '_/env'
-import { routerMiddleware } from 'react-router-redux'
 import { applyMiddleware, compose, createStore } from 'redux'
 import createSagaMiddleware, { END } from 'redux-saga'
-import { IAppContext } from '../types'
+import { IAppContext } from '../../types'
 import rootReducer from './reducers/root-reducer'
 import { IStore } from './redux-types'
 
 const initStore = (appContext: IAppContext) => {
     const {
-        app: { browserHistory },
         redux: { initialState },
     } = appContext
 
@@ -18,11 +16,6 @@ const initStore = (appContext: IAppContext) => {
     // saga middleware
     const sagaMiddleware = createSagaMiddleware()
     middlewares.push(sagaMiddleware)
-
-    // router redux middleware
-    if (browserHistory) {
-        middlewares.push(routerMiddleware(browserHistory))
-    }
 
     // Store Enhancers
     const enhancers = [

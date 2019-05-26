@@ -5,15 +5,19 @@ import cors from 'cors'
 import express from 'express'
 import React from 'react'
 import { renderToString } from 'react-dom/server'
+import { Provider } from 'react-redux'
 import { StaticRouter } from 'react-router-dom'
 import stats from '../../../build/react-loadable.json'
 
 import { PUBLIC_DIR } from '_/env'
 import App from './App'
+import appContext from './app-context'
+import initStore from './shared/redux/init-store.js'
 
 const server = express()
 const extractor = new ChunkExtractor({ stats, entrypoints: ['client'] })
 const configuredCors = cors()
+const store = initStore(appContext)
 server
     .disable('x-powered-by')
     .use(bodyParser.json({ limit: '20mb' }))
@@ -24,11 +28,13 @@ server
     .get('/*', (req, res) => {
         const context: { url?: any } = {}
         const markup = renderToString(
-            <ChunkExtractorManager extractor={extractor}>
-                <StaticRouter context={context} location={req.url}>
-                    <App />
-                </StaticRouter>
-            </ChunkExtractorManager>
+            <Provider store={store}>
+                <ChunkExtractorManager extractor={extractor}>
+                    <StaticRouter context={context} location={req.url}>
+                        <App />
+                    </StaticRouter>
+                </ChunkExtractorManager>
+            </Provider>
         )
 
         if (context.url) {

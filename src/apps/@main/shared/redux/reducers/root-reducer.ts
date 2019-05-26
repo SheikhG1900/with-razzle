@@ -1,7 +1,7 @@
 /**
  * Root Reducer
  */
-import { IAppContext } from '@/shared/types'
+import { IAppContext } from '_/apps/@main/types'
 import { routerReducer } from 'react-router-redux'
 import { IAction, IState } from '../redux-types'
 import actionsSummaryReducer from './actions-summary-reducer'
