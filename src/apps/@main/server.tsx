@@ -10,8 +10,8 @@ import { StaticRouter } from 'react-router-dom'
 import stats from '../../../build/react-loadable.json'
 
 import { PUBLIC_DIR } from '_/env'
-import App from './App'
 import appContext from './app-context'
+import LayoutRouter from './shared/layouts/layout-router'
 import initStore from './shared/redux/init-store.js'
 
 const server = express()
@@ -31,7 +31,7 @@ server
             <Provider store={store}>
                 <ChunkExtractorManager extractor={extractor}>
                     <StaticRouter context={context} location={req.url}>
-                        <App />
+                        <LayoutRouter />
                     </StaticRouter>
                 </ChunkExtractorManager>
             </Provider>

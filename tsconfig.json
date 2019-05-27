@@ -4,6 +4,7 @@
     "allowJs": true,
     "checkJs": false,
     "target": "esnext",
+    "module": "esnext",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports":true,
     "strictNullChecks": true,

@@ -2,6 +2,8 @@
   "extends": ["tslint:latest", "tslint-react"],
   "rules": {
     "no-implicit-dependencies":false,
+    "jsx-wrap-multiline": false,
+    "jsx-boolean-value": [true, "never"],
     "semicolon": [true, "never"],
     "quotemark": [true, "single"],
     "no-console": [false, "log", "error"],
