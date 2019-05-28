@@ -12,7 +12,9 @@ import stats from '../../../build/react-loadable.json'
 import { PUBLIC_DIR } from '_/env'
 import appContext from './app-context'
 import LayoutRouter from './shared/layouts/layout-router'
-import initStore from './shared/redux/init-store.js'
+import initStore from './shared/redux/init-store'
+import { $processPendingRequests } from './shared/redux/sagas/actions-summary-sagas'
+import $matchSaga from './shared/redux/sagas/saga-matcher'
 
 const server = express()
 const extractor = new ChunkExtractor({ stats, entrypoints: ['client'] })
@@ -27,7 +29,7 @@ server
     .use('/api', configuredCors, (req, res) => res.json({ status: 'done' }))
     .get('/*', (req, res) => {
         const context: { url?: any } = {}
-        const markup = renderToString(
+        const render = () => renderToString(
             <Provider store={store}>
                 <ChunkExtractorManager extractor={extractor}>
                     <StaticRouter context={context} location={req.url}>
@@ -37,11 +39,19 @@ server
             </Provider>
         )
 
+        // First render is to initiate all redux actions
+        render()
+
         if (context.url) {
             res.redirect(context.url)
         } else {
-            res.status(200).send(
-                `<!doctype html>
+            store.runSaga($processPendingRequests($matchSaga(appContext))).toPromise().then(() => {
+                const preLoaded = JSON.stringify(store.getState())
+
+                // This we are assuming that react will reder with data.
+                const markup = render()
+                res.status(200).send(
+                    `<!doctype html>
     <html lang="">
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -53,9 +63,13 @@ server
     </head>
     <body>
         <div id="root">${markup}</div>
+        <script>
+            window.__PRE_LOADED_STATE__ = ${preLoaded}
+        </script>
     </body>
 </html>`
-            )
+                )
+            })
         }
     })
 

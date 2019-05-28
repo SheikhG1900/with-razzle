@@ -9,8 +9,11 @@ const context: IAppContext = {
     redux: {
         initialState: {},
         reducers: {
-            moduleA: {
-                cat: crudReducer('moduleA', 'cat')
+            moduleA: (state = { cat: undefined }, action, root) => {
+                const crud = crudReducer('moduleA', 'cat')
+                const { cat } = state
+                const newCat = crud(cat, action)
+                return (newCat === cat) ? state : { ...state, cat: newCat }
             }
         },
         sagaMatchers: {

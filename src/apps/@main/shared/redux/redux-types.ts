@@ -40,7 +40,6 @@ export interface IStateActionsSummary {
     errors: IAction[],
 }
 export interface IState {
-    routing: any,
     actionsSummary: IStateActionsSummary
 }
 
