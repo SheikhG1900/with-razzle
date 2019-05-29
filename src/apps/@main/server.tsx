@@ -16,6 +16,9 @@ import initStore from './shared/redux/init-store'
 import { $processPendingRequests } from './shared/redux/sagas/actions-summary-sagas'
 import $matchSaga from './shared/redux/sagas/saga-matcher'
 
+import controller2 from '@/server/controllers/another-dummy'
+import controller1 from '@/server/controllers/dummy'
+
 const server = express()
 const extractor = new ChunkExtractor({ stats, entrypoints: ['client'] })
 const configuredCors = cors()
@@ -26,8 +29,9 @@ server
     .use(bodyParser.urlencoded({ limit: '20mb', extended: false }))
     .use(compression())
     .use(express.static(PUBLIC_DIR))
-    .use('/api', configuredCors, (req, res) => res.json({ status: 'done' }))
+    .use('/api', configuredCors, controller1, controller2)
     .get('/*', (req, res) => {
+        console.log('react endpoint called')
         const context: { url?: any } = {}
         const render = () => renderToString(
             <Provider store={store}>
