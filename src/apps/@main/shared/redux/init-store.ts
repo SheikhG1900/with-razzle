@@ -1,11 +1,11 @@
+import appContext from '@/app-context'
 import { ENV_PRODUCTION } from '_/env'
 import { applyMiddleware, compose, createStore } from 'redux'
 import createSagaMiddleware, { END } from 'redux-saga'
-import { IAppContext } from '../../types'
 import rootReducer from './reducers/root-reducer'
 import { IStore } from './redux-types'
 
-const initStore = (appContext: IAppContext) => {
+const initStore = () => {
     const {
         redux: { initialState },
     } = appContext
@@ -27,7 +27,7 @@ const initStore = (appContext: IAppContext) => {
         (!ENV_PRODUCTION && typeof window !== 'undefined' && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__)
         || compose
 
-    const store: IStore = createStore(rootReducer(appContext), initialState, composeEnhancers(...enhancers))
+    const store: IStore = createStore(rootReducer, initialState, composeEnhancers(...enhancers))
     store.runSaga = sagaMiddleware.run
     store.close = () => store.dispatch(END)
     return store

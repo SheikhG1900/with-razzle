@@ -1,7 +1,7 @@
-import { IAppContext } from '_/apps/@main/types'
+import appContext from '@/app-context'
 import { IAction } from '../redux-types'
 
-export default (appContext: IAppContext) => (action: IAction) => {
+export default (action: IAction) => {
   let $saga = null
   const { redux: { sagaMatchers } } = appContext
   Object.values(sagaMatchers).some(($match) => {

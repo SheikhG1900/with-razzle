@@ -19,7 +19,7 @@ import $matchSaga from './shared/redux/sagas/saga-matcher'
 const server = express()
 const extractor = new ChunkExtractor({ stats, entrypoints: ['client'] })
 const configuredCors = cors()
-const store = initStore(appContext)
+const store = initStore()
 server
     .disable('x-powered-by')
     .use(bodyParser.json({ limit: '20mb' }))
@@ -45,7 +45,7 @@ server
         if (context.url) {
             res.redirect(context.url)
         } else {
-            store.runSaga($processPendingRequests($matchSaga(appContext))).toPromise().then(() => {
+            store.runSaga($processPendingRequests($matchSaga)).toPromise().then(() => {
                 const preLoaded = JSON.stringify(store.getState())
 
                 // This we are assuming that react will reder with data.

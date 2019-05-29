@@ -1,11 +1,11 @@
 /**
  * Root Reducer
  */
-import { IAppContext } from '_/apps/@main/types'
+import appContext from '@/app-context'
 import { IAction, IState } from '../redux-types'
 import actionsSummaryReducer from './actions-summary-reducer'
 
-export default (appContext: IAppContext) => (state: Partial<IState> = {}, action: any): IState => {
+export default (state: Partial<IState> = {}, action: IAction): IState => {
   const { redux: { reducers } } = appContext
   const newState = {
     actionsSummary: actionsSummaryReducer(state.actionsSummary, action),
