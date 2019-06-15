@@ -1,13 +1,14 @@
 import http from 'http'
 import Loadable from 'react-loadable'
 
+import { APP_PORT } from '_/env'
 import app from './server'
 
 const server = http.createServer(app)
 let currentApp = app
 
 Loadable.preloadAll().then(() => {
-  server.listen(process.env.PORT || 3000, (error?) => {
+  server.listen(APP_PORT, (error?) => {
     if (error) {
       console.log(error)
     }

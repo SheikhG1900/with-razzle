@@ -9,7 +9,7 @@ export const makeActionTypeByAction = ({ command, meta: { module, entity } }: IA
 
 export default ((module: string, entity: string) => {
     const makeActionTypeByCommand = (command: string, mode: string) => makeActionType(module, command, entity, mode)
-    const makeActionCreator = (command: string, mode: string) => (data: any, onMount: boolean): IAction => {
+    const makeActionCreator = (command: string, mode: string) => (data?: any, onMount?: boolean): IAction => {
         // --- onMount ---
         // it is used to avoid extra data fetching.
         // if request comes with onMount flag true, it means fetching data for first time rendering

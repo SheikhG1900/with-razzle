@@ -12,7 +12,7 @@ import stats from '../../../build/react-loadable.json'
 import controllers from '@/server/controllers'
 import { PUBLIC_DIR } from '_/env'
 import appContext from './app-context'
-import LayoutRouter from './shared/layouts/layout-router'
+import LayoutRouter from './shared/react/layouts/layout-router'
 import initStore from './shared/redux/init-store'
 import { $processPendingRequests } from './shared/redux/sagas/actions-summary-sagas'
 import $matchSaga from './shared/redux/sagas/saga-matcher'
@@ -21,7 +21,6 @@ import { getActionsSummary } from './shared/redux/selectors/root-selectors'
 const server = express()
 const extractor = new ChunkExtractor({ stats, entrypoints: ['client'] })
 const configuredCors = cors()
-const store = initStore()
 
 server
     .disable('x-powered-by')
@@ -31,6 +30,7 @@ server
     .use(express.static(PUBLIC_DIR))
     .use('/api', configuredCors, controllers)
     .get('/*', (req, res) => {
+        const store = initStore()
         console.log('react endpoint called')
         const context: { url?: any } = {}
         const render = () => renderToString(
@@ -49,8 +49,7 @@ server
         if (context.url) {
             res.redirect(context.url)
         } else {
-            const sendResponse = () => {
-                const preLoaded = JSON.stringify(store.getState())
+            const sendResponse = (preLoadedState) => {
                 res.status(200).send(
                     `<!doctype html>
 <html lang="">
@@ -65,7 +64,7 @@ server
     <body>
         <div id="root">${markup}</div>
         <script>
-            window.__PRE_LOADED_STATE__ = ${preLoaded}
+            window.__PRE_LOADED_STATE__ = ${preLoadedState}
         </script>
     </body>
 </html>`
@@ -73,12 +72,17 @@ server
             }
             if (getActionsSummary(store.getState()).pending) {
                 store.runSaga($processPendingRequests($matchSaga)).toPromise().then(() => {
+
+                    // we dont want any further state changes in our 'preLoadedState'.
+                    // so we are stringfying it before second render.
+                    const preLoadedState = JSON.stringify(store.getState())
+
                     // This we are assuming that react will reder with data.
                     markup = render()
-                    sendResponse()
+                    sendResponse(preLoadedState)
                 })
             } else {
-                sendResponse()
+                sendResponse(JSON.stringify(store.getState()))
             }
 
         }

@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 import { BrowserRouter} from 'react-router-dom'
 import appContext from './app-context'
 import $rootSaga from './client/redux/sagas/root-saga'
-import LayoutRouter from './shared/layouts/layout-router'
+import LayoutRouter from './shared/react/layouts/layout-router'
 import initStore from './shared/redux/init-store'
 
 // preloaded state from the server

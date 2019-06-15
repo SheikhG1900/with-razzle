@@ -1,6 +1,6 @@
 import { Router } from 'express'
-export default Router().use('/dummy', Router()
-    .get('/b', (request, response) => {
-        response.json({ dummy: 'dummy val b' })
+export default Router().use('/group', Router()
+    .get('/', (request, response) => {
+        response.json({ rows: [{ id: '1', name: 'dummy val a' }]})
     })
 )

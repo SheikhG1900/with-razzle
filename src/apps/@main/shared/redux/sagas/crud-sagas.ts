@@ -7,12 +7,12 @@ const callApi = ajax('/api')
 
 export const $load = (action: IAction) => {
   const { meta: { module, entity }, data } = action
-  return $execute(action, () => callApi(`${module}/${entity}/search`, 'post', data))
+  return $execute(action, () => callApi(`/${module}/${entity}/search`, 'post', data))
 }
 
 export const $add = (action: IAction) => {
   const { meta: { module, entity }, data } = action
-  return $execute(action, () => callApi(`${module}/${entity}`, 'post', data))
+  return $execute(action, () => callApi(`/${module}/${entity}`, 'post', data))
 }
 
 export const $match = ({ command, mode }: IAction) => {

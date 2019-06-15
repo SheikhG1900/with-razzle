@@ -11,7 +11,7 @@ export interface IAction {
         resolve?(result: any, action: IAction): void,
         reject?(error: any, action: IAction, result?: any): void
     },
-    onMount: boolean
+    onMount: boolean | undefined
     meta: {
         module: string,
         entity: string
