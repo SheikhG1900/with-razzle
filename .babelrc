@@ -1,4 +1,5 @@
 {
-    "presets": [ "razzle/babel" ],
+    "presets": [ "razzle/babel", "@babel/preset-env",
+        "@babel/typescript" ],
     "plugins": [ "@loadable/babel-plugin" ]
 }

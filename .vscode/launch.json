@@ -12,7 +12,8 @@
             "runtimeExecutable": "npm",
             "protocol": "inspector",
             "console": "integratedTerminal",
-            "timeout": 40000,
+            "timeout": 80000,
+            "trace": true,
             "runtimeArgs": [
                 "run-script",
                 "start"

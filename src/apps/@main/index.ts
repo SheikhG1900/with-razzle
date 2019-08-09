@@ -1,8 +1,8 @@
 import http from 'http'
 import Loadable from 'react-loadable'
 
-import { APP_PORT } from '_/env'
-import app from './server'
+import { APP_PORT } from '../../env'
+import app from './server-no-render'
 
 const server = http.createServer(app)
 let currentApp = app

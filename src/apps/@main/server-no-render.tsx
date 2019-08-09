@@ -5,9 +5,8 @@ import cors from 'cors'
 import express from 'express'
 import stats from '../../../build/react-loadable.json'
 
-import controllers from '@/server/controllers'
-import { PUBLIC_DIR } from '_/env'
-
+import { PUBLIC_DIR } from '../../env'
+import controllers from './server/controllers'
 const server = express()
 const extractor = new ChunkExtractor({ stats, entrypoints: ['client'] })
 const configuredCors = cors()
@@ -19,8 +18,8 @@ server
     .use(compression())
     .use(express.static(PUBLIC_DIR))
     .use('/api', configuredCors, controllers)
-    .get('/*', (req, res) => {
-        console.log('react endpoint called')
+    .use('/*', (req, res) => {
+        console.log('react endpoint called- no render')
 
         const sendResponse = (preLoadedState) => {
             res.status(200).send(
