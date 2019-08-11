@@ -23,6 +23,21 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Launch Server only",
+            "runtimeExecutable": "npm",
+            "protocol": "inspector",
+            "console": "integratedTerminal",
+            "timeout": 10000,
+            "trace": true,
+            "runtimeArgs": [
+                "run-script",
+                "server-only"
+            ],
+            "port": 9230
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Launch Program",
             "program": "${workspaceFolder}\\start",
             "outFiles": [
