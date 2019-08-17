@@ -1,6 +1,6 @@
 export const dataTypes = {
-    BOOL: 'Boolean',
-    DATE: 'Date',
-    NUMBER: 'Number',
-    STRING: 'String',
+    Boolean: 'Boolean',
+    Date: 'Date',
+    Number: 'Number',
+    String: 'String',
 }

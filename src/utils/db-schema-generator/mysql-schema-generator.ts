@@ -1,5 +1,8 @@
-import { dataTypes } from '../db-schema-generator/data-types'
-const { STRING, BOOL, NUMBER, DATE } = dataTypes
+import { getMatches } from '../string'
+import { dataTypes } from './data-types'
+import { DbType, DbTypeNames, DbTable, DbField, DbRef } from './db-schema'
+import { Dictionary } from '../types';
+const { String: STRING, Boolean: BOOL, Number: NUMBER, Date: DATE } = dataTypes
 
 // tslint:disable: object-literal-sort-keys
 const typesMap = {
@@ -43,17 +46,18 @@ const typesMap = {
 
 }
 
-const getDataType = (dbType) => {
-    const { type, n1, n2 } = dbType.match(/^(?<type>[^\(\)]+)(\((?<n1>\d+)(,(?<n2>\d+))?\))?/i).groups
-    const dataType = {
+const getDataType = (dbType: string) => {
+    const typeMatch: any = (/^(?<type>[^\(\)]+)(\((?<n1>\d+)(,(?<n2>\d+))?\))?/i).exec(dbType)
+    const { type, n1, n2 } = typeMatch.groups
+    const dataType: DbType = {
         name: typesMap[type.toLowerCase()],
         size: n1 && parseInt(n1),
         scale: n2 && parseInt(n2),
     }
 
     // Specific case for BIT type with size > 1
-    if (dataType.name === BOOL && dataType.size > 1) {
-        dataType.name = NUMBER
+    if (dataType.name === BOOL && dataType.size && dataType.size > 1) {
+        dataType.name = NUMBER as DbTypeNames
     }
 
     return dataType
@@ -61,35 +65,65 @@ const getDataType = (dbType) => {
 export const generateSchema = async (execute: (sql: string) => Promise<any>, primayKey?: string) => {
     const tables = await Promise.all((await execute('show tables')).map(async (tableRow: object) => {
         const tableName = Object.values(tableRow)[0]
-        const createScripts = (await execute('SHOW CREATE TABLE `' + tableName + '`'))[0]['Create Table']
+        const script = (await execute('SHOW CREATE TABLE `' + tableName + '`'))[0]['Create Table']
 
-        const table = {
+        const table: Partial<DbTable> = {
+            children: [],
             name: tableName,
-            createScripts
+            parents: [],
+            script,
         }
 
-        const columnsDict = {};
-        (await execute(`describe ${tableName}`)).reduce((dict: object, { Field, Type, Null, Key }) => {
+        const fieldsDict: Dictionary<DbField> = {};
+        (await execute(`describe ${tableName}`)).reduce((dict: Dictionary<DbField>, { Field, Type, Null, Key }) => {
             dict[Field] = {
                 name: Field,
                 type: getDataType(Type),
                 isNull: Null.toLowerCase() === 'yes',
                 isPrimary: Key.toLowerCase() === 'pri',
-                table
+                table: table as DbTable
             }
             return dict
-        }, columnsDict)
+        }, fieldsDict)
 
-        table.columns = columnsDict
+        table.fields = fieldsDict
 
         return table
     }))
 
-    const tablesDict = {}
-    tables.reduce((dict: object, table: object) => {
+    // make dictionary of tables.
+    const tablesDict: Dictionary<DbTable> = {}
+    tables.reduce((dict: Dictionary<DbTable>, table: DbTable) => {
         dict[table.name] = table
         return dict
     }, tablesDict)
+
+    // add references to tables.
+    tables.forEach((table: DbTable) => {
+        const { name, script } = table
+        // tslint:disable-next-line: max-line-length
+        const fkMatches = getMatches(script, /CONSTRAINT\s+`(?<fkName>[^`]+)`\s+FOREIGN KEY\s+\((?<fkFields>[^\)]+)\)\s+REFERENCES\s+`(?<parent>[^`]+)`\s+\((?<pkFields>[^\)]+)\)/ig)
+        const fieldsRegex = /`([^`]+)`/ig
+        fkMatches.forEach((fkMatch) => {
+            const { fkName,
+                    fkFields: fkFieldsString,
+                    parent: parentTableName,
+                    pkFields: pkFieldsString } = fkMatch.groups
+
+            const parentTable = tablesDict[parentTableName]
+            const fkFields = getMatches(fkFieldsString, fieldsRegex).map(([_, fldName]) => table.fields[fldName])
+            const pkFields = getMatches(pkFieldsString, fieldsRegex).map(([_, fldName]) => parentTable.fields[fldName])
+            const dbRef: DbRef = {
+                child: table,
+                fkFields,
+                pkFields,
+                name: fkName,
+                parent: parentTable,
+            }
+            table.parents.push(dbRef)
+            parentTable.children.push(dbRef)
+        })
+    })
 
     return tablesDict
 
