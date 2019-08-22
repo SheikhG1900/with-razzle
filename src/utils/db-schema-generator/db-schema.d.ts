@@ -12,7 +12,7 @@ export interface DbType {
 export interface DbField {
     name: string
     type: DbType
-    isNull: boolean
+    isNullable: boolean
     isPrimary: boolean
     table: DbTable
 }
@@ -29,4 +29,9 @@ export interface DbTable {
     script: string
     parents: DbRef[]
     children: DbRef[]
+}
+
+export interface DbSchema {
+    tables: Dictionary<DbTable>
+    name?: string
 }

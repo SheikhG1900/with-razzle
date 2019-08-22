@@ -1,7 +1,7 @@
 import { getMatches } from '../string'
+import { Dictionary } from '../types'
 import { dataTypes } from './data-types'
-import { DbType, DbTypeNames, DbTable, DbField, DbRef } from './db-schema'
-import { Dictionary } from '../types';
+import { DbField, DbRef, DbSchema, DbTable, DbType, DbTypeNames } from './db-schema'
 const { String: STRING, Boolean: BOOL, Number: NUMBER, Date: DATE } = dataTypes
 
 // tslint:disable: object-literal-sort-keys
@@ -79,7 +79,7 @@ export const generateSchema = async (execute: (sql: string) => Promise<any>, pri
             dict[Field] = {
                 name: Field,
                 type: getDataType(Type),
-                isNull: Null.toLowerCase() === 'yes',
+                isNullable: Null.toLowerCase() === 'yes',
                 isPrimary: Key.toLowerCase() === 'pri',
                 table: table as DbTable
             }
@@ -125,6 +125,10 @@ export const generateSchema = async (execute: (sql: string) => Promise<any>, pri
         })
     })
 
-    return tablesDict
+    const dbSchema: DbSchema = {
+        tables: tablesDict
+    }
+
+    return dbSchema
 
 }
