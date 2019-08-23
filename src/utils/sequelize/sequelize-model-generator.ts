@@ -1,5 +1,5 @@
 import { DataTypes, Sequelize } from 'sequelize'
-import { DbField, DbRef, DbSchema, DbTable, DbType, DbTypeNames } from '../db-schema-generator/db-schema'
+import { DbSchema } from '../db-schema-generator/db-schema'
 const typeMap = {
     Boolean: DataTypes.BOOLEAN,
     Date: DataTypes.DATE,
