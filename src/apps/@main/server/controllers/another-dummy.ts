@@ -1,6 +1,6 @@
 import { ApolloServer, gql } from 'apollo-server-express'
 import { Application, Router } from 'express'
-import { generateSchema } from '../../../../utils/graphql/generate-graphql-schema'
+import { generateSchema } from '../../../../utils/graphql/graphql-schema-generator'
 import { connect } from '../../../../utils/sequelize/connection'
 
 const router = Router()
